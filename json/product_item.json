@@ -1,0 +1,17 @@
+
+[{  "id":0,
+    "name":"【男女同款】Chuck 70",
+    "price":399,
+    "introduce":["翻毛皮材质打造的鞋身兼具舒适脚感与复古外观","带翼鞋舌缝线和同色调衬里","经典星星脚踝贴片和复古风格饰牌","Ortholite®（欧索莱）鞋垫，舒适出众"],
+    "class":"Chuck 70",
+    "item":"../images/product_item/b1.png",
+    "img":{
+        "bimg":["../images/product_item/b1.png","../images/product_item/b2.png","../images/product_item/b3.png","../images/product_item/b4.png","../images/product_item/b5.png","../images/product_item/b6.png"],
+        "simg":["../images/product_item/s1.png","../images/product_item/s2.png","../images/product_item/s3.png","../images/product_item/s4.png","../images/product_item/s5.png","../images/product_item/s6.png"]
+        
+    },
+    "identifier":"  166216C001",
+    "color":"black/blue"
+}
+
+]
