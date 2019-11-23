@@ -472,7 +472,9 @@ define(["parabola","jquery","jquery-cookie"],function(parabola,$){
 
     //购物车数量显示
     function cart_num(){
+        
         var goodsStr = $.cookie("goods");
+
         // alert(JSON.parse(goodsStr)[0].num)
         if(goodsStr){
             var num = 0;

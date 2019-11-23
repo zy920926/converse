@@ -263,7 +263,7 @@ define(["jquery","jquery-cookie","parabola"],function($){
                 //如果是第一次创建cookie，用jquery的cookie方法创建新的cookie,并把第一次要储存的商品信息也储存进去
                 //创建的商品信息要放到数组中，以便后续再往goods数组中，添加新的商品信息
                 //储存商品信息，注意要转成json格式，两种方法，一是``,而是JSON。stringify()
-                $.cookie("goods",JSON.stringify([{"id":id,"num":1,"size":43,"price":399}]),{expires:7})
+                $.cookie("goods",JSON.stringify([{"id":id,"num":1}]),{expires:7})
             }else{//已经创建了cookie，并存储过goods（商品信息）
                //先假设cookie中没有该商品信息
                 var isExistence = false;
@@ -284,7 +284,7 @@ define(["jquery","jquery-cookie","parabola"],function($){
                 }
             //上面循环结束后如果cookie中没有该商品信息
                 if(!isExistence){
-                    goodsArr.push({"id":id,"num":1,"size":43,"price":399});
+                    goodsArr.push({"id":id,"num":1});
                 }
           //最后不论哪种情况，都要储存到cookie中,且注意要把goodArr数组 转成json格式
                $.cookie("goods",JSON.stringify(goodsArr),{expires:7}) 

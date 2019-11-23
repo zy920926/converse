@@ -14,6 +14,22 @@
     "color":"black/blue",
     "num":1,
     "size":43
+},
+{  "id":1,
+    "name":"张艺兴Chuck 70",
+    "price":500,
+    "introduce":["翻毛皮材质打造的鞋身兼具舒适脚感与复古外观","带翼鞋舌缝线和同色调衬里","经典星星脚踝贴片和复古风格饰牌","Ortholite®（欧索莱）鞋垫，舒适出众"],
+    "class":"Chuck 70",
+    "item":"../images/product_item/1b1.png",
+    "img":{
+        "bimg":["../images/product_item/1b1.png","../images/product_item/1b2.png","../images/product_item/1b3.png","../images/product_item/1b4.png","../images/product_item/1b5.png","../images/product_item/1b6.png"],
+        "simg":["../images/product_item/1s1.png","../images/product_item/1s2.png","../images/product_item/1s3.png","../images/product_item/1s4.png","../images/product_item/1s5.png","../images/product_item/1s6.png"]
+        
+    },
+    "identifier":"  166216C001",
+    "color":"white",
+    "num":1,
+    "size":42
 }
 
 ]

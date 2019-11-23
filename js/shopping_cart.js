@@ -149,6 +149,8 @@ define(["parabola","jquery","jquery-cookie"],function(parabola,$){
 
 
      //*****从cookie中获取数据加载到页面 
+    //定义一个全局数组用来装从cookie中匹配到的json中的数据
+    var newArr=[];
     function scDownload(){
         $.ajax({
             type:"get",
@@ -159,21 +161,20 @@ define(["parabola","jquery","jquery-cookie"],function(parabola,$){
                 var goodsStr = $.cookie('goods');
                 if(goodsStr){
                     var goodsArr = JSON.parse(goodsStr);
-                    var newArr=[];
+                    
                     //比较cookie和json中的数据；找出json中所有和cookie
                     //相同的数据，拿出来放进一个新数组
                     for(var i = 0;i<goodsArr.length;i++){
                         for(var j = 0; j< arr.length;j++){
                             if(goodsArr[i].id == arr[j].id){
-                                //页面选中的size储存在cookie中
-                                // arr[i].size = goodsArr[j].size;
-                                arr[j].num = goodsArr[i].num
-                                newArr.push(arr[j])
+                                arr[j].num = goodsArr[i].num;
+                                newArr.push(arr[i]);
                             }
                         }
                     }
-                      // console.log(newArr)
+                    // alert(newArr.length)
                     for(var k = 0;k < newArr.length;k++){
+                    
                         $(` <div class="scm_row" id="${newArr[k].id}">
                         <div class="info_change">
                             <div class="good_select iconfont">&#xe604;</div>
@@ -214,14 +215,15 @@ define(["parabola","jquery","jquery-cookie"],function(parabola,$){
                 }else{
                     $(".sc_main").find(".good_box").remove()
                 }
-                $(".sumNumber").html(sum_item);
+                
+                $(".sumNumber").html($(".scm_row").length);
                 $(".original_price").html("￥"+all_price);
                 var dis_all_price = parseInt (all_price * 0.8);
                 $(".discount_price").html("￥"+dis_all_price);
                 $(".final_price").html("￥"+all_price);
                 scDelete();
                 scClick();
-                scChange();
+                change();
 
 
             },
@@ -252,12 +254,8 @@ define(["parabola","jquery","jquery-cookie"],function(parabola,$){
 
                 })
             }
-            
-            $(".sumNumber").html(0);
-            $(".original_price").html(0);
-            $(".discount_price").html(0);
-            $(".final_price").html(0);
             cart_num();
+            change();
            
         })
     }
@@ -274,31 +272,21 @@ define(["parabola","jquery","jquery-cookie"],function(parabola,$){
                 if(goodsArr[i].id == id){
                     if($(this).html() == "+"){
                         goodsArr[i].num++;
+                        break;
                     }else if(goodsArr[i].num == 1 && $(this).html() == "-"){
                         alert("数量为1，不能在减少");
                     }else{
                         goodsArr[i].num--;
+                        break;
                     }
-
-
-                    //页面上的数据
-                    $(this).siblings("input").attr("value",`${goodsArr[i].num}`);
-                    var i_num = goodsArr[i].num;
-                    var i_price = goodsArr[i].price;
-                    
-                    var i_total_price = i_price*i_num;
-                    $(this).parent(".gd_num").siblings(".gd_price").html("￥"+i_total_price);
-                   
-                    $.cookie("goods", JSON.stringify(goodsArr), {
-                        expires: 7
-                    })
-                    cart_num();
-                    change();
-
-                    break;
                 }
             }
-
+            $(this).siblings("input").attr("value",`${goodsArr[i].num}`);
+            $.cookie("goods", JSON.stringify(goodsArr), {
+                expires: 7,
+            })
+            cart_num();
+            change();
         })
 
     }
@@ -306,23 +294,19 @@ define(["parabola","jquery","jquery-cookie"],function(parabola,$){
     //计算页面输入框数据变化
     function scChange(){
         $(".gd_num").find("input").change(function(){
-            var num = $(this).val();
+            var num = Number($(this).val());
+            
             var id = $(this).parents(".scm_row").attr("id");
             var goodsArr = JSON.parse($.cookie("goods"));
-            var price
             for(var i = 0; i < goodsArr.length; i++){
                 if(goodsArr[i].id == id){
-                    price = Number(goodsArr[i].price)
                     goodsArr[i].num = num;
-
                     break
                 }
             }
-            $(this).parent(".gd_num").siblings(".gd_price").
-            html("￥"+ price*num)
+          
             $.cookie("goods", JSON.stringify(goodsArr), {
                 expires: 7,
-            
             })
             cart_num();
         })
@@ -338,12 +322,12 @@ define(["parabola","jquery","jquery-cookie"],function(parabola,$){
         for(var i = 0;i < $(".scm_row").length;i++){
             var num = $(".scm_row").eq(i).find("input").val();
             sum_num += num;
-            var price = $(".scm_row").eq(i).find(".gd_price").html().substring(1);
-            sum_price += price;
+            $(".scm_row").eq(i).find(".gd_price").html("￥"+`${newArr[i].price}`)
+            sum_price += newArr[i].price *num;
+            $(".scm_row").eq(i).find(".gd_price").html("￥"+ num*newArr[i].price)
         }
-        sum_price = sum_price.substring(1)
+
         discount_sum_price = parseInt (sum_price * 0.8);
-        $(".sumNumber").html(Number(sum_num));
         $(".original_price").html("￥"+sum_price);
         $(".discount_price").html("￥"+discount_sum_price);
         $(".final_price").html("￥"+sum_price);

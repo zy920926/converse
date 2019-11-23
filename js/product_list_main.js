@@ -23,5 +23,4 @@ require(["product_list"],function(pl){
     pl.nav_download();
     pl.sideNav();
     pl.product();
-    pl.add();
 })

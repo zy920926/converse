@@ -272,7 +272,6 @@ define(["parabola","jquery","jquery-cookie"],function(parabola,$){
                 }
               
 
-
             },
             error:function(msg){
                 console.log(msg);
@@ -290,63 +289,23 @@ function product(){
         type:"get",
         url:"../json/product_list.json",
         success:function(arr){
-            for(var i = 0;i<30;i++){
+            for(var i = 0;i < 2;i++){
+                
                 $(` <aside class="item_box pic_active">
                 <a href="../html/product_details.html">
-                    <img src="${arr[0].item}" alt="">
+                    <img src="${arr[i].item}" alt="">
                 </a>
-                <a href="../html/product_details.html">${arr[0].name}</a>
-                <span>￥${arr[0].price}</span>
+                <a href="../html/product_details.html">${arr[i].name}</a>
+                <span>￥${arr[i].price}</span>
                 <div class="add_to_cart" id="${i}">加入购物车</div>
                 <div id="ball${i}" class="ball"></div> 
                 </aside>`).appendTo($(".product_display_box"));
             }
 
 
-            $(".add_to_cart").click(function(){
-                //这里的id 是通用的，json里单个商品的id，对应商品添加购物车按钮的id和储存在cookie字符串中的商品id都一一对应
-                var id = $(this).attr("id");
-                //判断是否第一次创建关于商品的cookie
-        
-                var first = $.cookie("goods") == null?true:false;
-                if(first){
-                    //如果是第一次创建cookie，用jquery的cookie方法创建新的cookie,并把第一次要储存的商品信息也储存进去
-                    //创建的商品信息要放到数组中，以便后续再往goods数组中，添加新的商品信息
-                    //储存商品信息，注意要转成json格式，两种方法，一是``,二是JSON.stringify()
-                    $.cookie("goods",JSON.stringify([{"id":0,"num":1,"price":399,"size":43}]),{expires:7})
-                }else{//已经创建了cookie，并存储过goods（商品信息）
-                   //先假设cookie中没有该商品信息
-                    var isExistence = false;
-                    //先用jquery cookie方法获取cookie中的goods，获取的是json格式的数组，是一个字符串
-                    var goodsStr = $.cookie("goods");
-                   //把json格式的goods解析成数组
-                    var goodsArr = JSON.parse(goodsStr);
-                
-                    
-                    //这里的goodsArr是1，因为数据库里只有一件商品
-            //循环一下goodArr, 判断该商品在cookie中是否第一次添加，是的话，在cookie中对应的商品数量信息为1，如果为多次添加改变该商品在cookie中的数量信息
-                    for(var i = 0; i < goodsArr.length;i++){
-                        //如果存在，跳出循环
-                        if(goodsArr[i].id = id){
-                            isExistence = true;
-                            goodsArr[i].num++;
-                            // alert(goodsArr[i].num)
-                            break;
-                        }
-                    }
-                //上面循环结束后如果cookie中没有该商品信息
-                    if(!isExistence){
-                        goodsArr.push({"id":0,"num":1,"price":399,"size":43});
-                    }
-              //最后不论哪种情况，都要储存到cookie中,且注意要把goodArr数组 转成json格式
-                   $.cookie("goods",JSON.stringify(goodsArr),{expires:7}) 
-                }
-
-                cart_num()
-                ballMove(id)
-            })
-           
+         
             product_animate()
+            add_to_cart();
 
         },
         error:function(msg){
@@ -356,6 +315,54 @@ function product(){
 }
 
 
+//页面商品添加到购物车并储存cookie
+function add_to_cart(){
+
+    $(".add_to_cart").click(function(){
+        //这里的id 是通用的，json里单个商品的id，对应商品添加购物车按钮的id和储存在cookie字符串中的商品id都一一对应
+        var id = $(this).attr("id");
+        var click_num
+        //判断是否第一次创建关于商品的cookie
+        var first = $.cookie("goods") == null?true:false;
+        if(first){
+            //如果是第一次创建cookie，用jquery的cookie方法创建新的cookie,并把第一次要储存的商品信息也储存进去
+            //创建的商品信息要放到数组中，以便后续再往goods数组中，添加新的商品信息
+            //储存商品信息，注意要转成json格式，两种方法，一是``,二是JSON.stringify()
+            $.cookie("goods",JSON.stringify([{"id":id,"num":1}]),{expires:7})
+        }else{//已经创建了cookie，并存储过goods（商品信息）
+           //先假设cookie中没有该商品信息
+            var isExistence = false;
+            //先用jquery cookie方法获取cookie中的goods，获取的是json格式的数组，是一个字符串
+            var goodsStr = $.cookie("goods");
+           //把json格式的goods解析成数组
+            var goodsArr = JSON.parse(goodsStr);
+        
+            
+            //这里的goodsArr是1，因为数据库里只有一件商品
+    //循环一下goodArr, 判断该商品在cookie中是否第一次添加，是的话，在cookie中对应的商品数量信息为1，如果为多次添加改变该商品在cookie中的数量信息
+            for(var i = 0; i < goodsArr.length;i++){
+                //如果存在，跳出循环
+                if(goodsArr[i].id == id){
+                    isExistence = true;
+                    goodsArr[i].num++;
+                    // alert(goodsArr[i].num)
+                    break;
+                }
+            }
+        //上面循环结束后如果cookie中没有该商品信息
+            if(!isExistence){
+                goodsArr.push({"id":id,"num":1});
+            }
+      //最后不论哪种情况，都要储存到cookie中,且注意要把goodArr数组 转成json格式
+            $.cookie("goods",JSON.stringify(goodsArr),{expires:7}) 
+        }
+        console.log(JSON.parse( $.cookie("goods")))
+
+        cart_num()
+        ballMove(id)
+    })
+   
+}
 
 
 
